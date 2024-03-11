@@ -1,0 +1,46 @@
+---
+title: "Linear Regression in R"
+author: "Melvin Galera"
+date: "2024-03-06"
+output: 
+  github_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+# Global code chunk options; adjust individual codes as required
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 12)
+
+# Load data
+insurance_df <- read.csv("./data/insurance.csv")
+
+# Load libraries
+library(tidyverse)
+library(cowplot)
+library(kableExtra)
+```
+
+***
+
+## I. Overview
+
+The dataset has 1338 observations and 7 variables:
+
+  * `age`       : the person's age
+  * `sex`       : either male or female
+  * `bmi`       : body mass index
+  * `children`  : the number of children in the person;s family
+  * `smoker`    : if the person is smoker or not ('yes' or 'no')
+  * `region`    : the region where the person resides ('southwest', 'southeast', 'northwest', 'northeast')
+  * `charges`   : the amount of medical cost
+
+  
+## II. Objective
+
+## III. Exploratory Analysis
+
+## IV. Fitting and Evaluation of Linear Model
+
+## V. Residuals and Residual Plots
+
+ 
