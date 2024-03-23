@@ -13,12 +13,18 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width 
 
 # Load data
 insurance_df <- read.csv("./data/insurance.csv")
+insurance_df_og <- insurance_df
 
 # Load libraries
 library(tidyverse)
 library(cowplot)
 library(kableExtra)
+library(scales)
+library(ggcorrplot)
+library(gridExtra)
+library(ggpubr)
 ```
+
 
 ***
 
@@ -37,10 +43,622 @@ The dataset has 1338 observations and 7 variables:
   
 ## II. Objective
 
+The objective is to develop a predictive model for medical cost using linear regression based on the given predictor variables.
+
+## III. Data 
+
+
+
+Initial look at the structure and content of `insurance_df` dataset:
+
+```{r, echo=TRUE}
+str(insurance_df)
+insurance_df %>% head(10)
+```
 ## III. Exploratory Analysis
+
+To perform EDA on the dataset, we perform univariate distribution of the variables and the bivariate and multivariate relationships among the variables.
+
+### A. Univariate Analysis
+
+1. Charges
+
+```{r, fig.align='center', fig.width=8, fig.height=6}
+# get summary statistics and histogram for charges
+summary(insurance_df$charges)
+
+```
+
+
+
+2. Age
+
+```{r, fig.align='center', fig.width=8, fig.height=6}
+# get summary statistics and histogram for age
+summary(insurance_df$age)
+
+```
+3. BMI
+```{r, fig.align='center', fig.width=8, fig.height=6}
+# get summary statistics and histogram for BMI
+summary(insurance_df$bmi)
+
+```
+
+
+
+
+4. Sex 
+```{r, include = FALSE}
+is.factor(insurance_df$sex)
+# Output is False
+
+#Convert to a factor
+insurance_df$sex <- factor(insurance_df$sex)
+
+#check for missing values
+sum(is.na(insurance_df$sex))
+#output is zero (0)
+```
+
+The distribution of `sex` based on count and proportion are:
+```{r, echo = TRUE}
+table(insurance_df$sex)
+prop.table(table(insurance_df$sex))
+```
+
+5. Smoker
+```{r, include = FALSE}
+is.factor(insurance_df$smoker)
+# Output is False
+
+#Convert to a factor
+insurance_df$smoker <- factor(insurance_df$smoker)
+
+#check for missing values
+sum(is.na(insurance_df$smoker))
+#output is zero (0)
+```
+
+The distribution of `smoker` based on count and proportion are:
+```{r, echo = TRUE}
+table(insurance_df$smoker)
+prop.table(table(insurance_df$smoker))
+```
+
+6. Region
+```{r, include = FALSE}
+is.factor(insurance_df$region)
+# Output is False
+
+#Convert to a factor
+insurance_df$region <- factor(insurance_df$region)
+
+#check for missing values
+sum(is.na(insurance_df$region))
+#output is zero (0)
+```
+
+The distribution of `region`` based on count and proportion are:
+```{r, echo = TRUE}
+table(insurance_df$region)
+prop.table(table(insurance_df$region))
+```
+
+7. Number of children
+
+```{r, include = FALSE}
+is.factor(insurance_df$children)
+# Output is False
+
+#Convert to a factor
+insurance_df$children_num <- factor(insurance_df$children)
+
+#check for missing values
+sum(is.na(insurance_df$children_num))
+#output is zero (0)
+```
+
+The distribution of `children_num` based on count and proportion are:
+```{r, echo = TRUE}
+table(insurance_df$children_num)
+prop.table(table(insurance_df$children_num))
+```
+```{r, fig.align='center', fig.width=8, fig.height=6}
+# get summary statistics and histogram for children
+summary(insurance_df$children)
+
+```
+Create age group
+```{r}
+age_breaks <- c(1, 20, 30, 40, 50, 60, 70)
+
+age_group_tags <- c("<20", "20-29", "30-39", "40-49", "50-59", "60+")
+
+insurance_df$age_group <- cut(insurance_df$age, breaks = age_breaks,
+                              include.lowest = TRUE,
+                              right = FALSE,
+                              labels = age_group_tags)
+
+```
+
+
+
+
+
+Univariate plots 1
+
+```{r, fig.align='center', fig.width=14, fig.height=4}
+# create plot for charges
+p1_charges <- ggplot(data = insurance_df, aes(x = charges)) +
+  geom_histogram(binwidth= 5000, color = "dodgerblue1", fill = "dodgerblue3") +
+  scale_x_continuous(labels = dollar_format())+
+  #scale_y_continuous(lim = c(0, 350)) +
+  labs(x = "Medical charges",
+       y = "Count",
+       title = "Medical charges distribution")
+
+# create plot for age
+# p2_age <- ggplot(data = insurance_df, aes(x = age)) +
+#   geom_histogram(binwidth = 10, color = "dodgerblue1", fill = "dodgerblue3") +
+#   #scale_y_continuous(lim = c(0, 350)) +
+#   labs(x = "Age",
+#        y = "Count",
+#        title = "Age distribution")
+
+# create plot for bmi
+p2_bmi <- ggplot(data = insurance_df, aes(x = bmi)) +
+  geom_histogram(binwidth = 3, color = "dodgerblue1", fill = "dodgerblue3") +
+  #scale_y_continuous(lim = c(0, 350)) +
+  labs(x = "BMI",
+       y = "Count",
+       title = "BMI distribution")
+
+# combined plots
+ggarrange(p1_charges, p2_bmi, ncol=2) #, labels = c ("A", "B", "C"))
+```
+
+
+
+
+
+Univariate plots 2
+
+```{r, fig.align='center', fig.width=14, fig.height=4}
+# create a bar plot for age group
+p3_age_group <- ggplot(data = insurance_df, aes(x = age_group, fill= age_group)) +
+  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3") +
+  geom_text(data = . %>% 
+              group_by(age_group) %>% 
+              tally() %>% 
+              mutate(prop = round(n/sum(n),3)) %>% 
+              ungroup(),
+            aes(y = n, label = scales::percent(prop)),
+            position = position_stack(vjust=0.5),
+            colour = "white", size = 4)+
+  labs(x = "Age Group",
+       y = "Count",
+       title = "Age distribution")
+
+
+# create a bar plot for number of children (children_num)
+p4_children_num <- ggplot(data = insurance_df, aes(x= children_num, fill = children_num)) +
+  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_text(data = . %>% 
+              group_by(children_num) %>% 
+              tally() %>% 
+              mutate(prop = round(n/sum(n),3)) %>% 
+              ungroup(),
+            aes(y = n, label = scales::percent(prop)),
+            position = position_stack(vjust=0.5),
+            colour = "white", size = 4)+
+  #scale_fill_manual(values = c("dodgerblue3", "goldenrod2", "cyan3", "hotpink2", "grey", "orange"))+
+  labs(x= "Number of children",
+       y = "Count",
+       title = "Number of children distribution")+
+  theme(legend.position = "none", 
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 11))
+
+# combined plots
+ggarrange(p3_age_group, p4_children_num, ncol=2) #, labels = c ("D", "E"))
+
+```
+Univariate plots 3
+
+```{r, fig.align='center', fig.width=14, fig.height=4}
+# create a bar plot for sex
+p5_sex <- ggplot(data = insurance_df, aes(x= sex, fill = sex)) +
+  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_text(data = . %>% 
+              group_by(sex) %>% 
+              tally() %>% 
+              mutate(prop = round(n/sum(n),3)) %>% 
+              ungroup(),
+            aes(y = n, label = scales::percent(prop)),
+            position = position_stack(vjust=0.5),
+            colour = "white", size = 4)+
+  #scale_fill_manual(values = c("dodgerblue3", "goldenrod2"))+
+  labs(x= "Sex",
+       y = "Count",
+       title = "Sex distribution")+
+  theme(legend.position = "none", 
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 11))
+
+# create a bar plot for smoker
+p6_smoker <- ggplot(data = insurance_df, aes(x= smoker, fill = smoker)) +
+  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_text(data = . %>% 
+              group_by(smoker) %>% 
+              tally() %>% 
+              mutate(prop = round(n/sum(n),3)) %>% 
+              ungroup(),
+            aes(y = n, label = scales::percent(prop)),
+            position = position_stack(vjust=0.5),
+            colour = "white", size = 4)+
+  #scale_fill_manual(values = c("dodgerblue3", "goldenrod2"))+
+  labs(x= "Smoker status",
+       y = "Count",
+       title = "Smoker status distribution")+
+  theme(legend.position = "none", 
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 11))
+
+
+# create a bar plot for region
+p7_region <- ggplot(data = insurance_df, aes(x= region, fill = region)) +
+  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_text(data = . %>% 
+              group_by(region) %>% 
+              tally() %>% 
+              mutate(prop = round(n/sum(n),3)) %>% 
+              ungroup(),
+            aes(y = n, label = scales::percent(prop)),
+            position = position_stack(vjust=0.5),
+            colour = "white", size = 4)+
+  #scale_fill_manual(values = c("dodgerblue3", "goldenrod2", "cyan3", "hotpink2"))+
+  labs(x= "Region",
+       y = "Count",
+       title = "Region distribution")+
+  theme(legend.position = "none", 
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 11))
+
+
+
+# combined plots
+ggarrange( p5_sex, p6_smoker, p7_region, ncol=3) #, labels = c ("F", "G"))
+```
+
+
+### B. Bivariate Analysis
+
+Charges and sex; charges and region
+
+```{r, fig.align='center', fig.width= 14, fig.height = 4}
+p3_charges_sex <- ggplot(data = insurance_df, aes(x= sex, y = charges)) +
+  geom_boxplot(alpha = 0.8, color = "dodgerblue3") + 
+  scale_fill_brewer(palette= "Blues") +
+  scale_y_continuous(label = dollar_format())+
+  labs(x = "Sex",
+       y = "Medical cost", 
+       title = "Medical cost and Sex") +
+  theme(legend.position = "none")
+
+p5_charges_region <- ggplot(data = insurance_df, aes(x= region, y = charges)) +
+  geom_boxplot(alpha = 0.8, color = "dodgerblue3")+
+  scale_fill_brewer(palette= "Blues") +
+  scale_y_continuous(label = dollar_format())+
+  labs(x = "Region",
+       y = "Medical cost", 
+       title = "Medical cost and Region") +
+  theme(legend.position = "none")
+
+ggarrange(p3_charges_sex, p5_charges_region, ncol=2)
+
+```
+
+4. Charges and smoker; charges and children
+
+```{r, fig.align='center', fig.width=14, fig.height = 4}
+p4_charges_smoker <- ggplot(data = insurance_df, aes(x= smoker, y = charges)) +
+  geom_boxplot(alpha = 0.8, color = "dodgerblue3")+
+  scale_y_continuous(label = dollar_format())+
+  labs(x = "Smoker status",
+       y = "Medical cost", 
+       title = "Medical cost and Smoker status") +
+  theme(legend.position = "none")
+
+p6_charges_children_num <- ggplot(data = insurance_df, aes(x= children_num, y = charges)) +
+  geom_boxplot(alpha = 0.8, color = "dodgerblue3")+
+  scale_y_continuous(label = dollar_format())+
+  labs(x = "Number of Children",
+       y = "Medical cost", 
+       title = "Medical cost and Number of children") +
+  theme(legend.position = "none")
+
+ggarrange(p4_charges_smoker, p6_charges_children_num, ncol=2)
+
+```
+
+
+### C. Multivariate Analysis
+
+1. Charges, age, sex; Charges, age and smoker
+
+```{r, fig.align="center", fig.width=14, fig.height = 4}
+
+p1_charges_age_sex <- ggplot(data=insurance_df, aes(x= age, y = charges, color = sex)) +
+  geom_point(size=2)+
+  geom_smooth(method = "lm", aes(color = sex), size = 0.5)+
+  scale_y_continuous(label = dollar_format())+
+  scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
+  theme(legend.position = "bottom") +
+  labs(x = "Age",
+       y = "Medical cost",
+       col = "Sex",
+       title = "Medical cost based on Age and Sex")
+
+p2_charges_age_smoker <- ggplot(data=insurance_df, aes(x= age, y = charges, color = smoker)) +
+  geom_point(size=2)+
+  geom_smooth(method = "lm", aes(color = smoker), size = 0.5)+
+  scale_y_continuous(label = dollar_format())+
+  scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
+  theme(legend.position = "bottom") +
+  labs(x = "Age",
+       y = "Medical cost",
+       col = "Smoker",
+       title = "Medical cost based on Age and Smoker status")
+
+ggarrange(p1_charges_age_sex, p2_charges_age_smoker, ncol=2)
+
+```
+
+2. Charges, bmi and sex; charges, bmi and smoer
+
+```{r, fig.align="center", fig.width=14, fig.height = 4}
+p3_charges_bmi_sex <- ggplot(data=insurance_df, aes(x= bmi, y = charges, color = sex)) +
+  geom_point(size=2)+
+  geom_smooth(formula = 'y ~ x', method = "lm", aes(color = sex), linewidth = 1)+
+  scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
+  scale_y_continuous(label = dollar_format())+
+  theme(legend.position = "bottom") +
+  labs(x = "BMI",
+       y = "Medical cost",
+       col = "Sex",
+       title = "Medical cost based on BMI and Sex")
+
+p4_charges_bmi_smoker <- ggplot(data=insurance_df, aes(x= bmi, y = charges, color = smoker)) +
+  geom_point(size=2)+
+  geom_smooth(formula = 'y ~ x', method = "lm", aes(color = smoker), linewidth = 1)+
+  scale_y_continuous(label = dollar_format())+
+  scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
+  theme(legend.position = "bottom") +
+  labs(x = "BMI",
+       y = "Medical cost",
+       col = "Smoker",
+       title = "Medical cost based on BMI and Smoker")
+
+ggarrange(p3_charges_bmi_sex, p4_charges_bmi_smoker, ncol = 2)
+```
+
+
+7. Correlation
+
+```{r, fig.align="center", fig.width= 8, fig.height = 4}
+
+
+model.matrix(~0+., data = insurance_df_og) %>% 
+  cor(use = "pairwise.complete.obs") %>% 
+  ggcorrplot(show.diag = F, type = "lower", lab = TRUE, lab_size = 3, colors = c("dodgerblue3", "white", "goldenrod2"),
+             ggtheme= ggplot2::theme_gray, tl.cex = 10)
+
+```
+
 
 ## IV. Fitting and Evaluation of Linear Model
 
+### Splitting the dataset
+Split the dataset: 80% training data and 20% test data
+
+```{r}
+RNGkind(sample.kind = "Rounding")
+
+set.seed(42)
+train_index <-  sample(nrow(insurance_df), nrow(insurance_df)*0.8)
+
+training_data <- insurance_df[train_index, ]
+test_data <- insurance_df[-train_index, ]
+
+nrow(training_data)
+nrow(test_data)
+
+```
+
+1. Model 1 (all) (charges ~ age + children + bmi + sex + smoker + region)
+
+<div align = 'center'> _charges = $\beta_{0}$ + $\beta{1}$age + $\beta{2}$bmi + $\beta{3}$children + $\beta{4}$sex + $\beta{5}$smoker + $\beta{6}$region + $\epsilon$_ </div>  
+
+```{r, echo = TRUE}
+model_01 <- lm(charges ~ age + bmi + children + sex + smoker + region, data = training_data)
+
+summary(model_01)
+
+```
+
+### Improving the model
+
+2. Model 2 (nonlinear) (charges ~ age + age2 + children + bmi + sex + smoker + region)
+```{r, echo=TRUE}
+insurance_df$age2 <- insurance_df$age^2
+training_data$age2 <- training_data$age^2
+test_data$age2 <- test_data$age^2
+```
+
+<div align = 'center'> _charges = $\beta_{0}$ + $\beta{1}$age + $\beta{2}$age^2 + $\beta{3}$bmi + $\beta{4}$children + $\beta{5}$sex + $\beta{6}$smoker + $\beta{7}$region + $\epsilon$_ </div>  
+
+```{r, echo = TRUE}
+model_02 <- lm(charges ~ age + age2 + bmi + children + sex + smoker + region, data = training_data)
+
+summary(model_02)
+```
+
+3. Model 3 (transformation )(charges ~ age + age2 + children + bmi + bmi30 + sex + smoker + region)
+
+Transform bmi to a binary indicator (obese, BMI>= 30, might have effect to charges)
+```{r, echo=TRUE}
+insurance_df$bmi30 <- ifelse(insurance_df$bmi >= 30, 1, 0)
+training_data$bmi30 <- ifelse(training_data$bmi >= 30, 1, 0)
+test_data$bmi30 <- ifelse(test_data$bmi >= 30, 1, 0)
+```
+
+<div align = 'center'> _charges = $\beta_{0}$ + $\beta{1}$age + $\beta{2}$age^2 + $\beta{3}$bmi + $\beta{4}$bmi30 +$\beta{5}$children + $\beta{6}$sex + $\beta{7}$smoker + $\beta{8}$region + $\epsilon$_ </div>  
+
+```{r, echo = TRUE}
+model_03 <- lm(charges ~ age + age2 + bmi + bmi30 + children + sex + smoker + region, data = training_data)
+
+summary(model_03)
+```
+
+4. Model 4 (interaction) (charges ~ age + age2 + children + bmi + bmi30 + sex + smoker + bmi30:smoker + region)
+
+Check for interaction effect of bmi30 (obesity) and smoking (yes):
+
+
+<div align = 'center'> _charges = $\beta_{0}$ + $\beta{1}$age + $\beta{2}$age^2 + $\beta{3}$bmi + $\beta{4}$bmi30 +$\beta{5}$children + $\beta{6}$sex + $\beta{7}$smoker + $\beta{8}$bmi30:smoker + $\beta{9}$region + $\epsilon$_ </div>  
+
+
+```{r, echo = TRUE}
+model_04 <- lm(charges ~ age + age2 + bmi + bmi30 + children + sex + smoker + bmi30:smoker + region, data = training_data)
+
+summary(model_04)
+```
+
+
+### Comparing the Models in terms of R2 and RSE
+
+```{r, echo =TRUE}
+model_list <- list(model_01, model_02, model_03, model_04)
+
+func1 <- function(x){summary(x)$r.squared}
+func2 <- function(x){summary(x)$sigma}
+
+model_results <- data.frame(
+  models = c("model_01", "model_02", "model_03", "model_04"),
+  r2 = unlist(lapply(model_list, func1)),
+  rse = unlist(lapply(model_list, func2))
+)
+
+model_results
+```
+
+```{r, fig.align="center", fig.width= 14, fig.height = 4}
+plot1_models <- ggplot(data = model_results, aes(x= models, y = r2, label = signif(r2, 3))) +
+  geom_col(width= 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_text(position = position_stack(vjust=0.5),
+            colour = "white", size = 4)+
+  labs(x = "R Squared",
+       y = "Model",
+       title = "Comparison of Model R squared values")
+
+plot2_models <- ggplot(data = model_results, aes(x= models, y = rse, label = signif(rse, 3))) +
+  geom_col(width= 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_text(position = position_stack(vjust=0.5),
+            colour = "white", size = 4)+
+  labs(x = "RSE",
+       y = "Model",
+       title = "Comparison of Model RSE values")
+
+ggarrange(plot1_models, plot2_models, ncol = 2)
+```
+
+
 ## V. Residuals and Residual Plots
 
- 
+1. Calculating the model residuals
+
+```{r, echo=TRUE}
+# calculate fitted values
+training_data$yhat <- predict(model_04)
+
+# calculate residuals
+training_data$ehat <- residuals(model_04)
+
+```
+
+2. Plotting Residual plots
+
+a. Normality assumption
+```{r, fig.align='center', fig.width=6, fig.height=2.5}
+
+plot2 <- ggplot(training_data, aes(x=ehat)) +
+  geom_histogram(binwidth = 800, color= "dodgerblue1", fill = "dodgerblue3") +
+  labs(x = "Residuals",
+       y = "Count",
+       title = "Histogram of residuals")
+
+
+plot2
+
+```
+
+ Residuals against fitted plot
+
+```{r, fig.align='center', fig.width=12, fig.height=6}
+par(mfrow =c(2,2))
+plot(model_04)
+```
+
+
+### Statistical test
+
+1. Shapiro-Wilks test
+```{r, echo=TRUE}
+shapiro.test(training_data$ehat)
+```
+The p-value <0.05 which means we reject the null hypothesis. This means that the residuals are not normally distributed.
+
+2. Breusch-Pagan test for constant variance
+```{r, echo=TRUE}
+olsrr::ols_test_breusch_pagan(model_04, rhs = TRUE)
+```
+
+Results: p-value is low, reject the null hypothesis. Hence, variance is not constant.
+
+
+Check for outliers
+
+```{r,fig.align='center', fig.width = 14, fig.height = 4}
+par(mfrow = c(1, 3))
+hist(insurance_df$charges, main = "Histogram", border= "dodgerblue1", col = "dodgerblue3")
+boxplot(insurance_df$charges, main = "Boxplot", border= "dodgerblue3", col = "white")
+qqnorm(insurance_df$charges, main = "Normal Q-Q plot", col = "dodgerblue3")
+```
+
+## Predicting from test data
+
+Use test data
+```{r, echo=TRUE}
+test_data$tst_yhat <- round(predict(model_04, newdata = test_data), 2)
+
+```
+
+Plot the known outcome with the predictions
+```{r, fig.align='center', fig.width=5, fig.height=2.5}
+ggplot(data=test_data, aes(x=charges, y=tst_yhat)) +
+  geom_point(color = "dodgerblue3", size=1.5) +
+  geom_smooth(method = "lm", color = "goldenrod2", se= FALSE, linetype= "dashed", size = 0.5) +
+  scale_y_continuous(label=dollar_format()) +
+  scale_x_continuous(label=dollar_format()) +
+  labs(x = "Known Charges",
+       y = "Predicted charges",
+       title= "Predicted against known outcomes plot")
+
+```
+
+
+
+
+
+
