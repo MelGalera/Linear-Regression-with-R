@@ -208,7 +208,7 @@ p1_charges <- ggplot(data = insurance_df, aes(x = charges)) +
 
 # create plot for bmi
 p2_bmi <- ggplot(data = insurance_df, aes(x = bmi)) +
-  geom_histogram(binwidth = 3, color = "dodgerblue1", fill = "dodgerblue3") +
+  geom_histogram(binwidth = 3, color = "goldenrod1", fill = "goldenrod3") +
   #scale_y_continuous(lim = c(0, 350)) +
   labs(x = "BMI",
        y = "Count",
@@ -243,7 +243,7 @@ p3_age_group <- ggplot(data = insurance_df, aes(x = age_group, fill= age_group))
 
 # create a bar plot for number of children (children_num)
 p4_children_num <- ggplot(data = insurance_df, aes(x= children_num, fill = children_num)) +
-  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_bar(width = 0.7, color = "goldenrod1", fill = "goldenrod3")+
   geom_text(data = . %>% 
               group_by(children_num) %>% 
               tally() %>% 
@@ -268,8 +268,8 @@ Univariate plots 3
 
 ```{r, fig.align='center', fig.width=14, fig.height=4}
 # create a bar plot for sex
-p5_sex <- ggplot(data = insurance_df, aes(x= sex, fill = sex)) +
-  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+p5_sex <- ggplot(data = insurance_df, aes(x= sex, fill = sex, color= sex)) +
+  geom_bar(width = 0.7)+
   geom_text(data = . %>% 
               group_by(sex) %>% 
               tally() %>% 
@@ -278,7 +278,8 @@ p5_sex <- ggplot(data = insurance_df, aes(x= sex, fill = sex)) +
             aes(y = n, label = scales::percent(prop)),
             position = position_stack(vjust=0.5),
             colour = "white", size = 4)+
-  #scale_fill_manual(values = c("dodgerblue3", "goldenrod2"))+
+  scale_fill_manual(values = c("dodgerblue3", "goldenrod3"))+
+  scale_color_manual(values = c("dodgerblue1", "goldenrod1"))+
   labs(x= "Sex",
        y = "Count",
        title = "Sex distribution")+
@@ -287,8 +288,9 @@ p5_sex <- ggplot(data = insurance_df, aes(x= sex, fill = sex)) +
         axis.title = element_text(size = 11))
 
 # create a bar plot for smoker
-p6_smoker <- ggplot(data = insurance_df, aes(x= smoker, fill = smoker)) +
-  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+p6_smoker <- ggplot(data = insurance_df, aes(x= smoker, fill = smoker, color= smoker)) +
+  geom_bar(width = 0.7)+
+  #geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
   geom_text(data = . %>% 
               group_by(smoker) %>% 
               tally() %>% 
@@ -297,7 +299,8 @@ p6_smoker <- ggplot(data = insurance_df, aes(x= smoker, fill = smoker)) +
             aes(y = n, label = scales::percent(prop)),
             position = position_stack(vjust=0.5),
             colour = "white", size = 4)+
-  #scale_fill_manual(values = c("dodgerblue3", "goldenrod2"))+
+  scale_fill_manual(values = c("dodgerblue3", "goldenrod3"))+
+  scale_color_manual(values = c("dodgerblue1", "goldenrod1"))+
   labs(x= "Smoker status",
        y = "Count",
        title = "Smoker status distribution")+
@@ -328,7 +331,7 @@ p7_region <- ggplot(data = insurance_df, aes(x= region, fill = region)) +
 
 
 # combined plots
-ggarrange( p5_sex, p6_smoker, p7_region, ncol=3) #, labels = c ("F", "G"))
+ggarrange( p7_region, p5_sex, p6_smoker, ncol=3) #, labels = c ("F", "G"))
 ```
 
 
@@ -451,7 +454,7 @@ ggarrange(p3_charges_bmi_sex, p4_charges_bmi_smoker, ncol = 2)
 
 model.matrix(~0+., data = insurance_df_og) %>% 
   cor(use = "pairwise.complete.obs") %>% 
-  ggcorrplot(show.diag = F, type = "lower", lab = TRUE, lab_size = 3, colors = c("dodgerblue3", "white", "goldenrod2"),
+  ggcorrplot(show.diag = F, type = "lower", lab = TRUE, lab_size = 3, colors = c("dodgerblue3", "white", "goldenrod3"),
              ggtheme= ggplot2::theme_gray, tl.cex = 10)
 
 ```
@@ -563,7 +566,7 @@ plot1_models <- ggplot(data = model_results, aes(x= models, y = r2, label = sign
        title = "Comparison of Model R squared values")
 
 plot2_models <- ggplot(data = model_results, aes(x= models, y = rse, label = signif(rse, 3))) +
-  geom_col(width= 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_col(width= 0.7, color = "goldenrod1", fill = "goldenrod3")+
   geom_text(position = position_stack(vjust=0.5),
             colour = "white", size = 4)+
   labs(x = "RSE",
@@ -645,7 +648,7 @@ test_data$tst_yhat <- round(predict(model_04, newdata = test_data), 2)
 ```
 
 Plot the known outcome with the predictions
-```{r, fig.align='center', fig.width=5, fig.height=2.5}
+```{r, fig.align='center', fig.width=5, fig.height=3.5}
 ggplot(data=test_data, aes(x=charges, y=tst_yhat)) +
   geom_point(color = "dodgerblue3", size=1.5) +
   geom_smooth(method = "lm", color = "goldenrod2", se= FALSE, linetype= "dashed", size = 0.5) +
