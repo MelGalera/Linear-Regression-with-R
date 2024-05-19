@@ -1,52 +1,57 @@
-Linear Regression in R
+Medical expenses prediction using regression analysis in R
 ================
 Melvin Galera
 2024-03-06
 
-- [I. Overview](#i-overview)
-- [II. Objective](#ii-objective)
-- [III. Data](#iii-data)
-- [III. Exploratory Analysis](#iii-exploratory-analysis)
-  - [A. Univariate Analysis](#a-univariate-analysis)
-  - [B. Bivariate Analysis](#b-bivariate-analysis)
-  - [C. Multivariate Analysis](#c-multivariate-analysis)
-- [IV. Fitting and Evaluation of Linear
-  Model](#iv-fitting-and-evaluation-of-linear-model)
-  - [Splitting the dataset](#splitting-the-dataset)
-  - [Improving the model](#improving-the-model)
-  - [Comparing the Models in terms of R2 and
-    RSE](#comparing-the-models-in-terms-of-r2-and-rse)
-- [V. Residuals and Residual Plots](#v-residuals-and-residual-plots)
-  - [Statistical test](#statistical-test)
-- [Predicting from test data](#predicting-from-test-data)
+### I. Project objective
 
-------------------------------------------------------------------------
+Health insurance is important because it provides protection from
+disruptive medical expenses which might result from an illness,
+disability or accident. Insurance companies, based on the health
+insurance coverage, can reimburse the insured for medical expenses
+incurred or can pay the care provider directly. It is important for
+insurers to be able to forecast medical expenses so they could
+accurately set yearly premiums that their beneficiaries have to pay to
+avail health insurance.
 
-## I. Overview
+Hence, this project was aimed to develop a predictive model for
+estimating medical expenses based on given predictor variables using
+linear regression method. In this case, predictor variables were based
+on patient characteristics data.
 
-The dataset has 1338 observations and 7 variables:
+<br>
+
+### II. Exploratory Data Analysis
+
+**A. Data Collection**
+
+For this analysis, a simulated dataset containing medical expenses for
+patients in the United States obtained from Kaggle was used. This
+dataset was created for the book “Machine Learning with R” (by Brett
+Lantz, 2013) using demographic statistics from the US Census Bureau. The
+sourced dataset has 1338 records and 7 variables indicating patient
+characteristics including the total medical expenses (referred as
+`charges`). The variables are:
 
 - `age` : the person’s age
-- `sex` : either male or female
-- `bmi` : body mass index
-- `children` : the number of children in the person;s family
-- `smoker` : if the person is smoker or not (‘yes’ or ‘no’)
-- `region` : the region where the person resides (‘southwest’,
-  ‘southeast’, ‘northwest’, ‘northeast’)
-- `charges` : the amount of medical cost
+- `sex` : the person’s gender, either male or female
+- `bmi` : the person’s body mass index which indicates how over or
+  under-weight the person is relative to their height
+- `children` : the number of children (or dependents) in the person’s
+  family
+- `smoker` : indicates if the person is a regular smoker or not (‘yes’
+  or ‘no’)
+- `region` : the US geographic region where the person resides
+  (‘southwest’, ‘southeast’, ‘northwest’, ‘northeast’)
+- `charges` : the amount of medical expenses (in US dollars) charged to
+  the insurance plan for the calendar year
 
-## II. Objective
+<br>
 
-The objective is to develop a predictive model for medical cost using
-linear regression based on the given predictor variables.
+**B. Data Exploration**
 
-## III. Data
-
-Initial look at the structure and content of `insurance_df` dataset:
-
-``` r
-str(insurance_df)
-```
+An initial look at the structure of the loaded dataset
+(`insurance_df`)shows:
 
     ## 'data.frame':    1338 obs. of  7 variables:
     ##  $ age     : int  19 18 28 33 32 31 46 37 37 60 ...
@@ -57,9 +62,7 @@ str(insurance_df)
     ##  $ region  : chr  "southwest" "southeast" "southeast" "northwest" ...
     ##  $ charges : num  16885 1726 4449 21984 3867 ...
 
-``` r
-insurance_df %>% head(10)
-```
+The first 10 records of the `insurance_df`:
 
     ##    age    sex    bmi children smoker    region   charges
     ## 1   19 female 27.900        0    yes southwest 16884.924
@@ -73,173 +76,187 @@ insurance_df %>% head(10)
     ## 9   37   male 29.830        2     no northeast  6406.411
     ## 10  60 female 25.840        0     no northwest 28923.137
 
-## III. Exploratory Analysis
+<br>
 
-To perform EDA on the dataset, we perform univariate distribution of the
-variables and the bivariate and multivariate relationships among the
-variables.
+To perform EDA on `insurance_df`, univariate distribution of variables,
+as well as bivariate and multivariate relationships among the variables
+were investigated.
 
-### A. Univariate Analysis
+<br>
 
-1.  Charges
+**1. Univariate Analysis**
 
-<!-- -->
+The figures below shows the distribution plots for medical expenses and
+patients BMI. The summary statistics are also described.
+
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<br>
+
+*Summary statistics for medical `charges`:*
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
     ##    1122    4740    9382   13270   16640   63770
 
-2.  Age
-
-<!-- -->
-
-    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   18.00   27.00   39.00   39.21   51.00   64.00
-
-3.  BMI
-
-<!-- -->
+*Summary statistics for patients `bmi`:*
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
     ##   15.96   26.30   30.40   30.66   34.69   53.13
 
-4.  Sex
+<br>
 
-The distribution of `sex` based on count and proportion are:
+The figures below shows the distribution bar plots for the patients’ age
+group, number of children, region, sex, and smoker status. The summary
+statistics are also described.
 
-``` r
-table(insurance_df$sex)
-```
+<br>
 
-    ## 
-    ## female   male 
-    ##    662    676
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
-``` r
-prop.table(table(insurance_df$sex))
-```
+<br>
 
-    ## 
-    ##    female      male 
-    ## 0.4947683 0.5052317
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<br>
 
-5.  Smoker
+*Summary statistics for patients’ `age`:*
 
-The distribution of `smoker` based on count and proportion are:
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##   18.00   27.00   39.00   39.21   51.00   64.00
 
-``` r
-table(insurance_df$smoker)
-```
-
-    ## 
-    ##   no  yes 
-    ## 1064  274
-
-``` r
-prop.table(table(insurance_df$smoker))
-```
-
-    ## 
-    ##        no       yes 
-    ## 0.7952167 0.2047833
-
-6.  Region
-
-The distribution of \`region\`\` based on count and proportion are:
-
-``` r
-table(insurance_df$region)
-```
-
-    ## 
-    ## northeast northwest southeast southwest 
-    ##       324       325       364       325
-
-``` r
-prop.table(table(insurance_df$region))
-```
-
-    ## 
-    ## northeast northwest southeast southwest 
-    ## 0.2421525 0.2428999 0.2720478 0.2428999
-
-7.  Number of children
-
-The distribution of `children_num` based on count and proportion are:
-
-``` r
-table(insurance_df$children_num)
-```
+*Distribution of number of `children` based on count:*
 
     ## 
     ##   0   1   2   3   4   5 
     ## 574 324 240 157  25  18
 
-``` r
-prop.table(table(insurance_df$children_num))
-```
+*Distribution of `region` residence based on count:*
 
     ## 
-    ##          0          1          2          3          4          5 
-    ## 0.42899851 0.24215247 0.17937220 0.11733931 0.01868460 0.01345291
+    ## northeast northwest southeast southwest 
+    ##       324       325       364       325
 
-    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   0.000   0.000   1.000   1.095   2.000   5.000
+*Distribution of `sex` based on count:*
 
-Create age group
+    ## 
+    ## female   male 
+    ##    662    676
 
-Univariate plots 1
+*Distribution of `smoker` status based on count:*
 
-<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+    ## 
+    ##   no  yes 
+    ## 1064  274
 
-Univariate plots 2
+<br>
 
-<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
-Univariate plots 3
+**2. Bivariate Analysis**
 
-<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
-
-### B. Bivariate Analysis
-
-Charges and sex; charges and region
+The figures below show the bivariate relationships of `charges` to
+`sex`, `region`, `smoker` and `children`.
 
 <img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
 
-4.  Charges and smoker; charges and children
+<br>
 
 <img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<br>
 
-### C. Multivariate Analysis
+The plot of `charges` against `smoker` clearly shows that the median
+charges for smokers are higher than non-smokers, and that the IQR are
+also larger for smokers. In terms of `region`, the median `charges` are
+almost same across all four regions, though the IQR or dispersion is
+highest for southeast. The same is observed in the plot of `charges`
+against `sex` where median charges is same between females and males
+though data on males have larger IQR. For the plot of `charges` against
+`children`, the median charges was observed to be increasing from having
+one child to having four children, while median charges for those
+without children is quite higher and lower for those with five children.
 
-1.  Charges, age, sex; Charges, age and smoker
+<br>
+
+**3. Multivariate Analysis**
+
+The figures below show the multivariate relationships of `charges`,
+`age`, `sex`, `smoker` and `bmi`.
 
 <img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
-
-2.  Charges, bmi and sex; charges, bmi and smoer
+<br>
 
 <img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<br>
 
-7.  Correlation
+The plots above show positive correlation between `charges` and `age`
+and between `charges` and `bmi`. It is also evident from the plots that
+there is not much difference in the correlation in terms of `sex` as
+compared to the correlation difference of `smoker`. In the plot of
+`charges` against `bmi` and `smoker`, the slope of the positive
+correlation line for smokers is steeper than the line for non-smoker at
+increasing BMI. This suggests possible interaction effect of `smoker`
+and `bmi`.
+
+<br>
+
+The figure below shows the **correlation** among the variables. Clearly,
+`smoker` (yes) has the highest positive correlation with `charges`,
+followed by `age` and `bmi`.
 
 <img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
+<br>
 
-## IV. Fitting and Evaluation of Linear Model
+### III. Evaluation of Linear Regression Models
 
-### Splitting the dataset
+**A. Splitting the dataset**
 
-Split the dataset: 80% training data and 20% test data
+The dataset was split into training data set (80%) and test data set
+(20%). The training data set was used to build the linear regression
+model and the test data set was used to evaluate the performance of the
+final model.
+
+``` r
+RNGkind(sample.kind = "Rounding")
+set.seed(42)
+
+train_index <-  sample(nrow(insurance_df), nrow(insurance_df)*0.8)
+
+training_data <- insurance_df[train_index, ]
+test_data <- insurance_df[-train_index, ]
+
+nrow(training_data)
+```
 
     ## [1] 1070
 
+``` r
+nrow(test_data)
+```
+
     ## [1] 268
 
-1.  Model 1 (all) (charges ~ age + children + bmi + sex + smoker +
-    region)
+<br>
+
+**B. Linear regression models**
+
+For this analysis, 4 models were evaluated, starting from a general
+simple model to an improved regression model.
+
+1.  Model 1 - General model including all independent variables
+2.  Model 2 - With added non-linear relationship
+3.  Model 3 - With added transformed variable
+4.  Model 4 - With added interaction relationship
+
+Model results are detailed below.
+
+<br>
+
+**Model 1 - General model including all independent variables**
+
+This model fits a linear regression model that relates all 6 independent
+variables with the target `charges` variable (medical expenses).
 
 <div align="center">
 
-*charges = $\beta_{0}$ + $\beta{1}$age + $\beta{2}$bmi +
-$\beta{3}$children + $\beta{4}$sex + $\beta{5}$smoker +
-$\beta{6}$region + $\epsilon$*
+*charges = $\beta_{0}$ + $\beta_{1}$age + $\beta_{2}$bmi +
+$\beta_{3}$children + $\beta_{4}$sex + $\beta_{5}$smoker +
+$\beta_{6}$region + $\epsilon$*
 
 </div>
 
@@ -276,22 +293,32 @@ summary(model_01)
     ## Multiple R-squared:  0.7577, Adjusted R-squared:  0.7559 
     ## F-statistic: 414.7 on 8 and 1061 DF,  p-value: < 2.2e-16
 
-### Improving the model
+<br>
 
-2.  Model 2 (nonlinear) (charges ~ age + age2 + children + bmi + sex +
-    smoker + region)
+The ‘estimate’ values in above model results refer to the estimated beta
+coefficients which indicate the increase in `charges` for an increase in
+each of the independent variable when the other variables are held
+constant. For instance, assuming everything else is equal, an additional
+child will result to an average of \$511 additional medical expenses
+(`charges`) per year. Furthermore, smokers have an average of \$24,177
+more in medical expenses compared to non-smokers.
 
-``` r
-insurance_df$age2 <- insurance_df$age^2
-training_data$age2 <- training_data$age^2
-test_data$age2 <- test_data$age^2
-```
+<br> <br>
+
+**Model 2 - With added non-linear relationship**
+
+This model includes a higher order term added to the regression Model 1
+to account for a possible nonlinear relationship of the target variable
+to one of the independent variables. In this instance, the effect of
+`age` on `charges` may not be constant in all ages and that expenses may
+be disproportionately higher for older patients. Hence, a variable
+`age2` with values equivalent to `age` squared was created.
 
 <div align="center">
 
-*charges = $\beta_{0}$ + $\beta{1}$age + $\beta{2}$age^2 +
-$\beta{3}$bmi + $\beta{4}$children + $\beta{5}$sex + $\beta{6}$smoker +
-$\beta{7}$region + $\epsilon$*
+*charges = $\beta_{0}$ + $\beta_{1}$age + $\beta_{2}$age^{2} +
+$\beta_{3}$bmi + $\beta_{4}$children + $\beta_{5}$sex +
+$\beta_{6}$smoker + $\beta_{7}$region + $\epsilon$*
 
 </div>
 
@@ -329,23 +356,28 @@ summary(model_02)
     ## Multiple R-squared:  0.7606, Adjusted R-squared:  0.7586 
     ## F-statistic: 374.2 on 9 and 1060 DF,  p-value: < 2.2e-16
 
-3.  Model 3 (transformation )(charges ~ age + age2 + children + bmi +
-    bmi30 + sex + smoker + region)
+<br>
 
-Transform bmi to a binary indicator (obese, BMI\>= 30, might have effect
-to charges)
+The result of this model shows that `charges` is more significantly
+related to `age2` than `age`.
 
-``` r
-insurance_df$bmi30 <- ifelse(insurance_df$bmi >= 30, 1, 0)
-training_data$bmi30 <- ifelse(training_data$bmi >= 30, 1, 0)
-test_data$bmi30 <- ifelse(test_data$bmi >= 30, 1, 0)
-```
+<br> <br>
+
+**Model 3 - With added transformed variable**
+
+This model also considers the possibility of `bmi` as not having a
+cumulative effect, but when BMI value is over a specific threshold
+value. This implies possibly no effect on medical expenses when patient
+is with normal weight but may have strong effect when patient is obese,
+i.e., when BMI is 30 or above. Hence, a binary indicator variable
+`bmi30` was created which has a value of 1 for `bmi` of at least 30, and
+0 otherwise.
 
 <div align="center">
 
-*charges = $\beta_{0}$ + $\beta{1}$age + $\beta{2}$age^2 +
-$\beta{3}$bmi + $\beta{4}$bmi30 +$\beta{5}$children + $\beta{6}$sex +
-$\beta{7}$smoker + $\beta{8}$region + $\epsilon$*
+*charges = $\beta_{0}$ + $\beta_{1}$age + $\beta_{2}$age^{2} +
+$\beta_{3}$bmi + $\beta_{4}$bmi30 +$\beta_{5}$children +
+$\beta_{6}$sex + $\beta_{7}$smoker + $\beta_{8}$region + $\epsilon$*
 
 </div>
 
@@ -384,17 +416,22 @@ summary(model_03)
     ## Multiple R-squared:  0.7648, Adjusted R-squared:  0.7626 
     ## F-statistic: 344.3 on 10 and 1059 DF,  p-value: < 2.2e-16
 
-4.  Model 4 (interaction) (charges ~ age + age2 + children + bmi +
-    bmi30 + sex + smoker + bmi30:smoker + region)
+<br> The result shows that both `bmi` and `bmi30` have significant
+effect on medical expenses. <br> <br>
 
-Check for interaction effect of bmi30 (obesity) and smoking (yes):
+**Model 4 - With added interaction relationship**
+
+This model considers the possibility of an interaction or combined
+effect of the variables `bmi30` and `smoker` (obesity and smoking) on
+the medical expenses. Hence, an interaction form `bmi30:smoker` was
+added.
 
 <div align="center">
 
-*charges = $\beta_{0}$ + $\beta{1}$age + $\beta{2}$age^2 +
-$\beta{3}$bmi + $\beta{4}$bmi30 +$\beta{5}$children + $\beta{6}$sex +
-$\beta{7}$smoker + $\beta{8}$bmi30:smoker + $\beta{9}$region +
-$\epsilon$*
+*charges = $\beta_{0}$ + $\beta_{1}$age + $\beta_{2}$age^{2} +
+$\beta_{3}$bmi + $\beta_{4}$bmi30 + $\beta_{5}$children +
+$\beta_{6}$sex + $\beta_{7}$smoker + $\beta_{8}$bmi30:smoker +
+$\beta_{9}$region + $\epsilon$*
 
 </div>
 
@@ -434,108 +471,80 @@ summary(model_04)
     ## Multiple R-squared:  0.8696, Adjusted R-squared:  0.8683 
     ## F-statistic: 641.5 on 11 and 1058 DF,  p-value: < 2.2e-16
 
-### Comparing the Models in terms of R2 and RSE
+<br> The result shows a significant effect on medical expenses of
+combined obesity and smoking.  
+<br> <br>
 
-``` r
-model_list <- list(model_01, model_02, model_03, model_04)
-
-func1 <- function(x){summary(x)$r.squared}
-func2 <- function(x){summary(x)$sigma}
-
-model_results <- data.frame(
-  models = c("model_01", "model_02", "model_03", "model_04"),
-  r2 = unlist(lapply(model_list, func1)),
-  rse = unlist(lapply(model_list, func2))
-)
-
-model_results
-```
+**C. Comparing the models**
 
     ##     models        r2      rse
-    ## 1 model_01 0.7576967 6105.411
-    ## 2 model_02 0.7606171 6071.368
-    ## 3 model_03 0.7647922 6021.031
-    ## 4 model_04 0.8696129 4485.051
+    ## 1 model_01 0.7558697 6105.411
+    ## 2 model_02 0.7585846 6071.368
+    ## 3 model_03 0.7625711 6021.031
+    ## 4 model_04 0.8682573 4485.051
+
+The four models were compared in terms of the ‘residual standard error
+(RSE)’ and the ‘R-squared’ values to determine which model has the
+better fit for the dataset .
+
+Since RSE measures the standard deviation of the residuals (i.e.,
+observed value minus the predicted value)in the regression model, the
+model with the smaller RSE is the better regression model that fit the
+dataset. On the other hand, the multiple R-squared value, called
+coefficient of determination, indicates how well a model as a whole
+explains the values of the dependent variable. The closer the value of
+this R-squared to 1.0, the better the model explains the data. However,
+since the four models have different numbers of explanatory variables,
+the ‘adjusted R-squared value’ were used for comparison. The adjusted
+R-squared corrects the multiple R-squared with penalty based on number
+of variables in the model.
+
+Based on the figures below, **Model 4** has the smallest RSE and highest
+adjusted R-squared, and hence, is the regression model that better fits
+the dataset.
 
 <img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-31-1.png" style="display: block; margin: auto;" />
+<br> <br>
 
-## V. Residuals and Residual Plots
+**D. Predicting from test data**
 
-1.  Calculating the model residuals
+The performance of Model 4 on new data was evaluated using the test
+data. Predicted values of `charges` for the test data were obtained and
+plotted against known `charges` and shown in the figure below. The plot
+shows a good predictive performance to medical expenses around \$20,000
+but slightly overpredict on `charges` above this. There are also few
+points showing large deviation of predicted from known values of
+`charges` in the test data.
 
-``` r
-# calculate fitted values
-training_data$yhat <- predict(model_04)
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
 
-# calculate residuals
-training_data$ehat <- residuals(model_04)
-```
+<br> <br>
 
-2.  Plotting Residual plots
+### IV. Conclusion
 
-<!-- -->
-
-1.  Normality assumption
-    <img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
-
-Residuals against fitted plot
-
-<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-34-1.png" style="display: block; margin: auto;" />
-
-### Statistical test
-
-1.  Shapiro-Wilks test
+In this project, predictive models for determining medical expenses
+based on certain patient characteristics were developed and compared.
+The selected model below, Model 4, which is an improved model including
+an added non-linear relationship (`age2`), a transformed variable
+(`bmi30`) and an interaction relationship (`bmi30:smoker`) was
+determined to have the better fit to the dataset among the models,
+evident from its smallest RSE (4490) and highest adjusted RSE (0.87).
 
 ``` r
-shapiro.test(training_data$ehat)
+model_04 <- lm(charges ~ age + age2 + bmi + bmi30 + children + sex + smoker + bmi30:smoker + region, data = training_data)
 ```
 
-    ## 
-    ##  Shapiro-Wilk normality test
-    ## 
-    ## data:  training_data$ehat
-    ## W = 0.48954, p-value < 2.2e-16
+Based on the summary of Model 4, the variables with the greatest
+predictive power are `age2`, `children`, `smokeryes` and
+`bmi30:smokeryes`. A child or dependent has an averaged increased cost
+of \$708 in medical expenses per year. Furthermore, a smoker has an
+average increased cost of \$13,500 per year, and an obese smoker will
+have an additional \$19,894 per year in medical expenses.
 
-The p-value \<0.05 which means we reject the null hypothesis. This means
-that the residuals are not normally distributed.
-
-2.  Breusch-Pagan test for constant variance
-
-``` r
-olsrr::ols_test_breusch_pagan(model_04, rhs = TRUE)
-```
-
-    ## 
-    ##  Breusch Pagan Test for Heteroskedasticity
-    ##  -----------------------------------------
-    ##  Ho: the variance is constant            
-    ##  Ha: the variance is not constant        
-    ## 
-    ##                                                           Data                                                           
-    ##  ------------------------------------------------------------------------------------------------------------------------
-    ##  Response : charges 
-    ##  Variables: age age2 bmi bmi30 children sexmale smokeryes regionnorthwest regionsoutheast regionsouthwest bmi30:smokeryes 
-    ## 
-    ##          Test Summary          
-    ##  ------------------------------
-    ##  DF            =    11 
-    ##  Chi2          =    25.76975 
-    ##  Prob > Chi2   =    0.007021606
-
-Results: p-value is low, reject the null hypothesis. Hence, variance is
-not constant.
-
-Check for outliers
-
-<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-37-1.png" style="display: block; margin: auto;" />
-
-## Predicting from test data
-
-Use test data
-
-``` r
-test_data$tst_yhat <- round(predict(model_04, newdata = test_data), 2)
-```
-
-Plot the known outcome with the predictions
-<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-39-1.png" style="display: block; margin: auto;" />
+Although the model has good R-squared result, the plot showing predicted
+`charges` against known `charges` of the test data shows that the
+regression model does not perfectly fit the dataset. As the dataset
+seemed not large enough, adding more data (observations) to the dataset
+might improve the model and increase accuracy of the model in
+forecasting medical expenses. Moreover, further investigation and action
+on the outliers could also help in building more fitting models.
