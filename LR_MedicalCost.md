@@ -303,7 +303,7 @@ child will result to an average of \$511 additional medical expenses
 (`charges`) per year. Furthermore, smokers have an average of \$24,177
 more in medical expenses compared to non-smokers.
 
-<br> <br>
+<br>
 
 **Model 2 - With added non-linear relationship**
 
@@ -361,7 +361,7 @@ summary(model_02)
 The result of this model shows that `charges` is more significantly
 related to `age2` than `age`.
 
-<br> <br>
+<br>
 
 **Model 3 - With added transformed variable**
 
@@ -417,7 +417,9 @@ summary(model_03)
     ## F-statistic: 344.3 on 10 and 1059 DF,  p-value: < 2.2e-16
 
 <br> The result shows that both `bmi` and `bmi30` have significant
-effect on medical expenses. <br> <br>
+effect on medical expenses.
+
+<br>
 
 **Model 4 - With added interaction relationship**
 
@@ -472,8 +474,9 @@ summary(model_04)
     ## F-statistic: 641.5 on 11 and 1058 DF,  p-value: < 2.2e-16
 
 <br> The result shows a significant effect on medical expenses of
-combined obesity and smoking.  
-<br> <br>
+combined obesity and smoking.
+
+<br>
 
 **C. Comparing the models**
 
@@ -504,7 +507,8 @@ adjusted R-squared, and hence, is the regression model that better fits
 the dataset.
 
 <img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-31-1.png" style="display: block; margin: auto;" />
-<br> <br>
+
+<br>
 
 **D. Predicting from test data**
 

@@ -506,7 +506,7 @@ summary(model_01)
 The 'estimate' values in above model results refer to the estimated beta coefficients which indicate the increase in `charges` for an increase in each of the independent variable when the other variables are held constant. For instance, assuming everything else is equal, an additional child will result to an average of \$511 additional medical expenses (`charges`) per year. Furthermore, smokers have an average of \$24,177 more in medical expenses compared to non-smokers. 
 
 <br>
-<br>
+
 
 **Model 2 - With added non-linear relationship**
 
@@ -530,7 +530,7 @@ summary(model_02)
 The result of this model shows that `charges` is more significantly related to `age2` than `age`.
 
 <br>
-<br> 
+
 
 **Model 3 - With added transformed variable**
 
@@ -552,8 +552,9 @@ summary(model_03)
 
 <br>
 The result shows that both `bmi` and `bmi30` have significant effect on medical expenses.
+
 <br>
-<br>
+
 
 **Model 4 - With added interaction relationship**
 
@@ -569,7 +570,7 @@ summary(model_04)
 
 <br>
 The result shows a significant effect on medical expenses of combined obesity and smoking.   
-<br>
+
 <br>
 
 
@@ -616,8 +617,10 @@ plot2_models <- ggplot(data = model_results, aes(x= models, y = rse, label = sig
 
 ggarrange(plot2_models, plot1_models, ncol = 2)
 ```
+
 <br>
-<br>
+
+
 
 **D. Predicting from test data**
 
