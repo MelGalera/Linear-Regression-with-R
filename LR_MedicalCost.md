@@ -85,7 +85,7 @@ were investigated.
 The figures below shows the distribution plots for medical expenses and
 patients BMI. The summary statistics are also described.
 
-<img src="index_files/figure-gfm/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
 <br>
 
 *Summary statistics for medical `charges`:*
@@ -106,11 +106,11 @@ statistics are also described.
 
 <br>
 
-<img src="index_files/figure-gfm/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
 <br>
 
-<img src="index_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 <br>
 
 *Summary statistics for patients’ `age`:*
@@ -149,11 +149,11 @@ statistics are also described.
 The figures below show the bivariate relationships of `charges` to
 `sex`, `region`, `smoker` and `children`.
 
-<img src="index_files/figure-gfm/unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
 
 <br>
 
-<img src="index_files/figure-gfm/unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
 <br>
 
 The plot of `charges` against `smoker` clearly shows that the median
@@ -174,10 +174,10 @@ without children is quite higher and lower for those with five children.
 The figures below show the multivariate relationships of `charges`,
 `age`, `sex`, `smoker` and `bmi`.
 
-<img src="index_files/figure-gfm/unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 <br>
 
-<img src="index_files/figure-gfm/unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
 <br>
 
 The plots above show positive correlation between `charges` and `age`
@@ -195,7 +195,7 @@ The figure below shows the **correlation** among the variables. Clearly,
 `smoker` (yes) has the highest positive correlation with `charges`,
 followed by `age` and `bmi`.
 
-<img src="index_files/figure-gfm/unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
 <br>
 
 ### III. Evaluation of Linear Regression Models
@@ -502,7 +502,7 @@ Based on the figures below, **Model 4** has the smallest RSE and highest
 adjusted R-squared, and hence, is the regression model that better fits
 the dataset.
 
-<img src="index_files/figure-gfm/unnamed-chunk-31-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-31-1.png" style="display: block; margin: auto;" />
 
 <br>
 
@@ -516,7 +516,7 @@ but slightly overpredict on `charges` above this. There are also few
 points showing large deviation of predicted from known values of
 `charges` in the test data.
 
-<img src="index_files/figure-gfm/unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
+<img src="LR_MedicalCost_files/figure-gfm/unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
 
 <br> <br>
 
