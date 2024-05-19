@@ -1,3 +1,6 @@
+Medical expenses prediction using regression analysis in R
+================
+Melvin Galera
 
 ### I. Project objective
 

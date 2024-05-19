@@ -1,6 +1,6 @@
 ---
-#title: "Medical expenses prediction using regression analysis in R"
-#author: "Melvin Galera"
+title: "Medical expenses prediction using regression analysis in R"
+author: "Melvin Galera"
 #date: "2024-03-06"
 output: 
   github_document:
