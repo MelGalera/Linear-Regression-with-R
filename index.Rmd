@@ -74,6 +74,8 @@ To perform EDA on `insurance_df`, univariate distribution of variables, as well 
 
 The figures below shows the distribution plots for medical expenses and patients BMI. The summary statistics are also described.
 
+theme(plot.title = element_text(size = 15), axis.title = element_text(size = 15), axis.text = element_text(size = 16)) +
+
 ```{r, fig.align='center', fig.width=14, fig.height=4}
 # create plot for medical expenses
 p1_charges <- ggplot(data = insurance_df, aes(x = charges)) +
