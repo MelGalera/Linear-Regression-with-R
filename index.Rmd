@@ -381,7 +381,7 @@ The plot of `charges` against `smoker` clearly shows that the median charges for
 
 The figures below show the multivariate relationships of `charges`, `age`, `sex`, `smoker` and `bmi`.
 
-```{r, fig.align="center", fig.width=15, fig.height = 5}
+```{r, fig.align="center", fig.width=15, fig.height = 6}
 
 p1_charges_age_sex <- ggplot(data=insurance_df, aes(x= age, y = charges, color = sex)) +
   geom_point(size=2)+
@@ -412,7 +412,7 @@ ggarrange(p1_charges_age_sex, p2_charges_age_smoker, ncol=2)
 ```
 <br>
 
-```{r, fig.align="center", fig.width=15, fig.height = 5}
+```{r, fig.align="center", fig.width=15, fig.height = 6}
 p3_charges_bmi_sex <- ggplot(data=insurance_df, aes(x= bmi, y = charges, color = sex)) +
   geom_point(size=2)+
   geom_smooth(formula = 'y ~ x', method = "lm", aes(color = sex), linewidth = 1)+
@@ -449,7 +449,7 @@ The plots above show positive correlation between `charges` and `age` and betwee
 The figure below shows the **correlation** among the variables. Clearly, `smoker` (yes) has the highest positive correlation with `charges`, followed by `age` and `bmi`.
 
 
-```{r, fig.align="center", fig.width= 6, fig.height = 5.5}
+```{r, fig.align='center', fig.width= 6, fig.height = 6}
 
 model.matrix(~0+., data = insurance_df_og) %>% 
   cor(use = "pairwise.complete.obs") %>% 
