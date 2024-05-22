@@ -74,14 +74,14 @@ To perform EDA on `insurance_df`, univariate distribution of variables, as well 
 
 The figures below shows the distribution plots for medical expenses and patients BMI. The summary statistics are also described.
 
-theme(plot.title = element_text(size = 15), axis.title = element_text(size = 15), axis.text = element_text(size = 16)) +
 
-```{r, fig.align='center', fig.width=14, fig.height=4}
+
+```{r, fig.align='center', fig.width=15, fig.height=4}
 # create plot for medical expenses
 p1_charges <- ggplot(data = insurance_df, aes(x = charges)) +
   geom_histogram(binwidth= 5000, color = "dodgerblue1", fill = "dodgerblue3") +
   scale_x_continuous(labels = dollar_format())+
-  #scale_y_continuous(lim = c(0, 350)) +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16)) +
   labs(x = "Charges",
        y = "Count",
        title = "Charges distribution")
@@ -89,7 +89,7 @@ p1_charges <- ggplot(data = insurance_df, aes(x = charges)) +
 # create plot for bmi
 p2_bmi <- ggplot(data = insurance_df, aes(x = bmi)) +
   geom_histogram(binwidth = 3, color = "goldenrod1", fill = "goldenrod3") +
-  #scale_y_continuous(lim = c(0, 350)) +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16)) +
   labs(x = "BMI",
        y = "Count",
        title = "BMI distribution")
@@ -185,7 +185,7 @@ sum(is.na(insurance_df$children_num))
 
 <br> 
 
-```{r, fig.align='center', fig.width=14, fig.height=4}
+```{r, fig.align='center', fig.width=15, fig.height=4}
 # create a bar plot for age group
 p3_age_group <- ggplot(data = insurance_df, aes(x = age_group, fill= age_group)) +
   geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3") +
@@ -196,7 +196,8 @@ p3_age_group <- ggplot(data = insurance_df, aes(x = age_group, fill= age_group))
               ungroup(),
             aes(y = n, label = scales::percent(prop)),
             position = position_stack(vjust=0.5),
-            colour = "white", size = 4)+
+            colour = "white", size = 5)+
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16)) +
   labs(x = "Age Group",
        y = "Count",
        title = "Age distribution")
@@ -212,13 +213,12 @@ p4_children_num <- ggplot(data = insurance_df, aes(x= children_num, fill = child
               ungroup(),
             aes(y = n, label = scales::percent(prop)),
             position = position_stack(vjust=0.5),
-            colour = "white", size = 4)+
+            colour = "white", size = 5)+
   labs(x= "Number of children",
        y = "Count",
        title = "Number of children distribution")+
-  theme(legend.position = "none", 
-        axis.text = element_text(size = 10),
-        axis.title = element_text(size = 11))
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16)) 
+ 
 
 # combined plots
 ggarrange(p3_age_group, p4_children_num, ncol=2) 
@@ -237,15 +237,14 @@ p5_sex <- ggplot(data = insurance_df, aes(x= sex, fill = sex, color= sex)) +
               ungroup(),
             aes(y = n, label = scales::percent(prop)),
             position = position_stack(vjust=0.5),
-            colour = "white", size = 4)+
+            colour = "white", size = 5)+
   scale_fill_manual(values = c("dodgerblue3", "goldenrod3"))+
   scale_color_manual(values = c("dodgerblue1", "goldenrod1"))+
   labs(x= "Sex",
        y = "Count",
        title = "Sex distribution")+
-  theme(legend.position = "none", 
-        axis.text = element_text(size = 10),
-        axis.title = element_text(size = 11))
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
+  theme(legend.position = "none")
 
 # create a bar plot for smoker
 p6_smoker <- ggplot(data = insurance_df, aes(x= smoker, fill = smoker, color= smoker)) +
@@ -257,15 +256,14 @@ p6_smoker <- ggplot(data = insurance_df, aes(x= smoker, fill = smoker, color= sm
               ungroup(),
             aes(y = n, label = scales::percent(prop)),
             position = position_stack(vjust=0.5),
-            colour = "white", size = 4)+
+            colour = "white", size = 5)+
   scale_fill_manual(values = c("dodgerblue3", "goldenrod3"))+
   scale_color_manual(values = c("dodgerblue1", "goldenrod1"))+
   labs(x= "Smoker status",
        y = "Count",
        title = "Smoker status distribution")+
-  theme(legend.position = "none", 
-        axis.text = element_text(size = 10),
-        axis.title = element_text(size = 11))
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16)) +
+  theme(legend.position = "none")
 
 
 # create a bar plot for region
@@ -278,18 +276,15 @@ p7_region <- ggplot(data = insurance_df, aes(x= region, fill = region)) +
               ungroup(),
             aes(y = n, label = scales::percent(prop)),
             position = position_stack(vjust=0.5),
-            colour = "white", size = 4)+
+            colour = "white", size = 5)+
   labs(x= "Region",
        y = "Count",
        title = "Region distribution")+
-  theme(legend.position = "none", 
-        axis.text = element_text(size = 10),
-        axis.title = element_text(size = 11))
-
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))
 
 
 # combined plots
-ggarrange( p7_region, p5_sex, p6_smoker, ncol=3) 
+ggarrange( p7_region, p5_sex, p6_smoker, ncol=3, widths = c(1.3, 0.85, 0.85)) 
 ```
 <br>
 
@@ -327,7 +322,7 @@ table(insurance_df$smoker)
 
 The figures below show the bivariate relationships of `charges` to `sex`, `region`, `smoker` and `children`.
 
-```{r, fig.align='center', fig.width= 14, fig.height = 4}
+```{r, fig.align='center', fig.width= 15, fig.height = 4}
 p3_charges_sex <- ggplot(data = insurance_df, aes(x= sex, y = charges)) +
   geom_boxplot(alpha = 0.8, color = "dodgerblue3") + 
   scale_fill_brewer(palette= "Blues") +
@@ -335,6 +330,7 @@ p3_charges_sex <- ggplot(data = insurance_df, aes(x= sex, y = charges)) +
   labs(x = "Sex",
        y = "Charges", 
        title = "Charges and Sex") +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   theme(legend.position = "none")
 
 p5_charges_region <- ggplot(data = insurance_df, aes(x= region, y = charges)) +
@@ -344,6 +340,7 @@ p5_charges_region <- ggplot(data = insurance_df, aes(x= region, y = charges)) +
   labs(x = "Region",
        y = "Charges", 
        title = "Charges and Region") +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   theme(legend.position = "none")
 
 ggarrange(p3_charges_sex, p5_charges_region, ncol=2)
@@ -352,13 +349,14 @@ ggarrange(p3_charges_sex, p5_charges_region, ncol=2)
 
 <br>
 
-```{r, fig.align='center', fig.width=14, fig.height = 4}
+```{r, fig.align='center', fig.width=15, fig.height = 4}
 p4_charges_smoker <- ggplot(data = insurance_df, aes(x= smoker, y = charges)) +
   geom_boxplot(alpha = 0.8, color = "dodgerblue3")+
   scale_y_continuous(label = dollar_format())+
   labs(x = "Smoker status",
        y = "Charges", 
        title = "Charges and Smoker status") +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   theme(legend.position = "none")
 
 p6_charges_children_num <- ggplot(data = insurance_df, aes(x= children_num, y = charges)) +
@@ -367,6 +365,7 @@ p6_charges_children_num <- ggplot(data = insurance_df, aes(x= children_num, y = 
   labs(x = "Number of Children",
        y = "Charges", 
        title = "Charges and Number of children") +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   theme(legend.position = "none")
 
 ggarrange(p4_charges_smoker, p6_charges_children_num, ncol=2)
@@ -382,14 +381,15 @@ The plot of `charges` against `smoker` clearly shows that the median charges for
 
 The figures below show the multivariate relationships of `charges`, `age`, `sex`, `smoker` and `bmi`.
 
-```{r, fig.align="center", fig.width=14, fig.height = 4}
+```{r, fig.align="center", fig.width=15, fig.height = 5}
 
 p1_charges_age_sex <- ggplot(data=insurance_df, aes(x= age, y = charges, color = sex)) +
   geom_point(size=2)+
   geom_smooth(method = "lm", aes(color = sex), size = 0.5)+
   scale_y_continuous(label = dollar_format())+
   scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
-  theme(legend.position = "bottom") +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
+  theme(legend.position = "bottom", legend.title = element_text(size = 15), legend.text = element_text(size = 15)) +
   labs(x = "Age",
        y = "Charges",
        col = "Sex",
@@ -400,7 +400,8 @@ p2_charges_age_smoker <- ggplot(data=insurance_df, aes(x= age, y = charges, colo
   geom_smooth(method = "lm", aes(color = smoker), size = 0.5)+
   scale_y_continuous(label = dollar_format())+
   scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
-  theme(legend.position = "bottom") +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
+  theme(legend.position = "bottom", legend.title = element_text(size = 15), legend.text = element_text(size = 15)) +
   labs(x = "Age",
        y = "Charges",
        col = "Smoker",
@@ -411,13 +412,14 @@ ggarrange(p1_charges_age_sex, p2_charges_age_smoker, ncol=2)
 ```
 <br>
 
-```{r, fig.align="center", fig.width=14, fig.height = 4}
+```{r, fig.align="center", fig.width=15, fig.height = 5}
 p3_charges_bmi_sex <- ggplot(data=insurance_df, aes(x= bmi, y = charges, color = sex)) +
   geom_point(size=2)+
   geom_smooth(formula = 'y ~ x', method = "lm", aes(color = sex), linewidth = 1)+
   scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
   scale_y_continuous(label = dollar_format())+
-  theme(legend.position = "bottom") +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
+  theme(legend.position = "bottom", legend.title = element_text(size = 15), legend.text = element_text(size = 15)) +
   labs(x = "BMI",
        y = "Charges",
        col = "Sex",
@@ -428,7 +430,8 @@ p4_charges_bmi_smoker <- ggplot(data=insurance_df, aes(x= bmi, y = charges, colo
   geom_smooth(formula = 'y ~ x', method = "lm", aes(color = smoker), linewidth = 1)+
   scale_y_continuous(label = dollar_format())+
   scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
-  theme(legend.position = "bottom") +
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
+  theme(legend.position = "bottom", legend.title = element_text(size = 15), legend.text = element_text(size = 15)) +
   labs(x = "BMI",
        y = "Charges",
        col = "Smoker",
@@ -446,11 +449,11 @@ The plots above show positive correlation between `charges` and `age` and betwee
 The figure below shows the **correlation** among the variables. Clearly, `smoker` (yes) has the highest positive correlation with `charges`, followed by `age` and `bmi`.
 
 
-```{r, fig.align="center", fig.width= 8, fig.height = 4}
+```{r, fig.align="center", fig.width= 6, fig.height = 5.5}
 
 model.matrix(~0+., data = insurance_df_og) %>% 
   cor(use = "pairwise.complete.obs") %>% 
-  ggcorrplot(show.diag = F, type = "lower", lab = TRUE, lab_size = 3, colors = c("dodgerblue3", "white", "goldenrod3"),
+  ggcorrplot(show.diag = F, type = "lower", lab = TRUE, lab_size = 3.5, colors = c("dodgerblue3", "white", "goldenrod3"),
              ggtheme= ggplot2::theme_gray, tl.cex = 10)
 
 ```
@@ -600,11 +603,12 @@ Since RSE measures the standard deviation of the residuals (i.e., observed value
 Based on the figures below, **Model 4** has the smallest RSE and highest adjusted R-squared, and hence, is the regression model that better fits the dataset. 
 
 
-```{r, fig.align="center", fig.width= 14, fig.height = 4}
+```{r, fig.align="center", fig.width= 15, fig.height = 4}
 plot1_models <- ggplot(data = model_results, aes(x= models, y = r2, label = signif(r2, 3))) +
   geom_col(width= 0.7, color = "goldenrod1", fill = "goldenrod3")+
   geom_text(position = position_stack(vjust=0.5),
-            colour = "white", size = 4)+
+            colour = "white", size = 5)+
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   labs(x = "R Squared",
        y = "Model",
        title = "Comparison of Model R squared values")
@@ -612,7 +616,8 @@ plot1_models <- ggplot(data = model_results, aes(x= models, y = r2, label = sign
 plot2_models <- ggplot(data = model_results, aes(x= models, y = rse, label = signif(rse, 3))) +
   geom_col(width= 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
   geom_text(position = position_stack(vjust=0.5),
-            colour = "white", size = 4)+
+            colour = "white", size = 5)+
+  theme(plot.title = element_text(size = 15), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   labs(x = "RSE",
        y = "Model",
        title = "Comparison of Model RSE values")
@@ -633,7 +638,7 @@ test_data$tst_yhat <- round(predict(model_04, newdata = test_data), 2)
 
 The performance of Model 4 on new data was evaluated using the test data. Predicted  values of `charges` for the test data were obtained and plotted against known `charges` and shown in the figure below. The plot shows a good predictive performance to medical expenses around \$20,000 but slightly overpredict on `charges` above this. There are also few points showing large deviation of predicted from known values of `charges` in the test data. 
 
-```{r, fig.align='center', fig.width=5, fig.height=3.5}
+```{r, fig.align='center', fig.width=5.5, fig.height=4}
 ggplot(data=test_data, aes(x=charges, y=tst_yhat)) +
   geom_point(color = "dodgerblue3", size=1.5) +
   geom_smooth(method = "lm", color = "goldenrod2", se= FALSE, linetype= "dashed", size = 0.5) +
