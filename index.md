@@ -1,6 +1,8 @@
 Medical expenses prediction using regression analysis in R
 ================
 
+<br>
+
 ### I. Project objective
 
 Health insurance is important because it provides protection from
