@@ -552,3 +552,5 @@ seemed not large enough, adding more data (observations) to the dataset
 might improve the model and increase accuracy of the model in
 forecasting medical expenses. Moreover, further investigation and action
 on the outliers could also help in building more fitting models.
+
+<br> <br> <br>
