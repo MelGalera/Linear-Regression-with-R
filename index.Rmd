@@ -76,7 +76,7 @@ The figures below shows the distribution plots for medical expenses and patients
 
 
 
-```{r, fig.align='center', fig.width=15, fig.height=6}
+```{r, fig.align='center', fig.width=15, fig.height=5}
 # create plot for medical expenses
 p1_charges <- ggplot(data = insurance_df, aes(x = charges)) +
   geom_histogram(binwidth= 5000, color = "dodgerblue1", fill = "dodgerblue3") +
@@ -185,7 +185,7 @@ sum(is.na(insurance_df$children_num))
 
 <br> 
 
-```{r, fig.align='center', fig.width=15, fig.height=6}
+```{r, fig.align='center', fig.width=15, fig.height=5}
 # create a bar plot for age group
 p3_age_group <- ggplot(data = insurance_df, aes(x = age_group, fill= age_group)) +
   geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3") +
@@ -226,7 +226,7 @@ ggarrange(p3_age_group, p4_children_num, ncol=2)
 
 <br>
 
-```{r, fig.align='center', fig.width=14, fig.height=6}
+```{r, fig.align='center', fig.width=14, fig.height=5}
 # create a bar plot for sex
 p5_sex <- ggplot(data = insurance_df, aes(x= sex, fill = sex, color= sex)) +
   geom_bar(width = 0.7)+
@@ -322,7 +322,7 @@ table(insurance_df$smoker)
 
 The figures below show the bivariate relationships of `charges` to `sex`, `region`, `smoker` and `children`.
 
-```{r, fig.align='center', fig.width= 15, fig.height = 6}
+```{r, fig.align='center', fig.width= 15, fig.height = 5}
 p3_charges_sex <- ggplot(data = insurance_df, aes(x= sex, y = charges)) +
   geom_boxplot(alpha = 0.8, color = "dodgerblue3") + 
   scale_fill_brewer(palette= "Blues") +
@@ -349,7 +349,7 @@ ggarrange(p3_charges_sex, p5_charges_region, ncol=2)
 
 <br>
 
-```{r, fig.align='center', fig.width=15, fig.height = 6}
+```{r, fig.align='center', fig.width=15, fig.height = 5}
 p4_charges_smoker <- ggplot(data = insurance_df, aes(x= smoker, y = charges)) +
   geom_boxplot(alpha = 0.8, color = "dodgerblue3")+
   scale_y_continuous(label = dollar_format())+
@@ -603,7 +603,7 @@ Since RSE measures the standard deviation of the residuals (i.e., observed value
 Based on the figures below, **Model 4** has the smallest RSE and highest adjusted R-squared, and hence, is the regression model that better fits the dataset. 
 
 
-```{r, fig.align="center", fig.width= 15, fig.height = 6}
+```{r, fig.align="center", fig.width= 15, fig.height = 5}
 plot1_models <- ggplot(data = model_results, aes(x= models, y = r2, label = signif(r2, 3))) +
   geom_col(width= 0.7, color = "goldenrod1", fill = "goldenrod3")+
   geom_text(position = position_stack(vjust=0.5),
@@ -638,7 +638,7 @@ test_data$tst_yhat <- round(predict(model_04, newdata = test_data), 2)
 
 The performance of Model 4 on new data was evaluated using the test data. Predicted  values of `charges` for the test data were obtained and plotted against known `charges` and shown in the figure below. The plot shows a good predictive performance to medical expenses around \$20,000 but slightly overpredict on `charges` above this. There are also few points showing large deviation of predicted from known values of `charges` in the test data. 
 
-```{r, fig.align='center', fig.width=6.5, fig.height=5}
+```{r, fig.align='center', fig.width=5.5, fig.height=4}
 ggplot(data=test_data, aes(x=charges, y=tst_yhat)) +
   geom_point(color = "dodgerblue3", size=1.5) +
   geom_smooth(method = "lm", color = "goldenrod2", se= FALSE, linetype= "dashed", size = 0.5) +
