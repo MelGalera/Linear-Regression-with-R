@@ -334,7 +334,7 @@ p3_charges_sex <- ggplot(data = insurance_df, aes(x= sex, y = charges)) +
   theme(legend.position = "none")
 
 p5_charges_region <- ggplot(data = insurance_df, aes(x= region, y = charges)) +
-  geom_boxplot(alpha = 0.8, color = "dodgerblue3")+
+  geom_boxplot(alpha = 0.8, color = "cyan4")+
   scale_fill_brewer(palette= "Blues") +
   scale_y_continuous(label = dollar_format())+
   labs(x = "Region",
@@ -416,7 +416,7 @@ ggarrange(p1_charges_age_sex, p2_charges_age_smoker, ncol=2)
 p3_charges_bmi_sex <- ggplot(data=insurance_df, aes(x= bmi, y = charges, color = sex)) +
   geom_point(size=2)+
   geom_smooth(formula = 'y ~ x', method = "lm", aes(color = sex), linewidth = 1)+
-  scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
+  scale_color_manual(values= c("goldenrod3", "cyan4")) +
   scale_y_continuous(label = dollar_format())+
   theme(plot.title = element_text(size = 16), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   theme(legend.position = "bottom", legend.title = element_text(size = 15), legend.text = element_text(size = 15)) +
@@ -453,7 +453,7 @@ The figure below shows the **correlation** among the variables. Clearly, `smoker
 
 model.matrix(~0+., data = insurance_df_og) %>% 
   cor(use = "pairwise.complete.obs") %>% 
-  ggcorrplot(show.diag = F, type = "lower", lab = TRUE, lab_size = 3.5, colors = c("dodgerblue3", "white", "goldenrod3"),
+  ggcorrplot(show.diag = F, type = "lower", lab = TRUE, lab_size = 3.5, colors = c("cyan4", "white", "goldenrod3"),
              ggtheme= ggplot2::theme_gray, tl.cex = 10)
 
 ```
@@ -614,7 +614,7 @@ plot1_models <- ggplot(data = model_results, aes(x= models, y = r2, label = sign
        title = "Comparison of Model R squared values")
 
 plot2_models <- ggplot(data = model_results, aes(x= models, y = rse, label = signif(rse, 3))) +
-  geom_col(width= 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_col(width= 0.7, color = "cadetblue1", fill = "cyan4")+
   geom_text(position = position_stack(vjust=0.5),
             colour = "white", size = 5)+
   theme(plot.title = element_text(size = 16), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
@@ -640,7 +640,7 @@ The performance of Model 4 on new data was evaluated using the test data. Predic
 
 ```{r, fig.align='center', fig.width=5.5, fig.height=4}
 ggplot(data=test_data, aes(x=charges, y=tst_yhat)) +
-  geom_point(color = "dodgerblue3", size=1.5) +
+  geom_point(color = "cyan4", size=1.5) +
   geom_smooth(method = "lm", color = "goldenrod2", se= FALSE, linetype= "dashed", size = 0.5) +
   scale_y_continuous(label=dollar_format()) +
   scale_x_continuous(label=dollar_format()) +
