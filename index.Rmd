@@ -79,7 +79,7 @@ The figures below shows the distribution plots for medical expenses and patients
 ```{r, fig.align='center', fig.width=15, fig.height=5}
 # create plot for medical expenses
 p1_charges <- ggplot(data = insurance_df, aes(x = charges)) +
-  geom_histogram(binwidth= 5000, color = "dodgerblue1", fill = "dodgerblue3") +
+  geom_histogram(binwidth= 5000, color = "cadetblue2", fill = "cyan4") +
   scale_x_continuous(labels = dollar_format())+
   theme(plot.title = element_text(size = 16), axis.title = element_text(size = 16), axis.text = element_text(size = 16)) +
   labs(x = "Charges",
@@ -188,7 +188,7 @@ sum(is.na(insurance_df$children_num))
 ```{r, fig.align='center', fig.width=15, fig.height=5}
 # create a bar plot for age group
 p3_age_group <- ggplot(data = insurance_df, aes(x = age_group, fill= age_group)) +
-  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3") +
+  geom_bar(width = 0.7, color = "cadetblue2", fill = "cyan4") +
   geom_text(data = . %>% 
               group_by(age_group) %>% 
               tally() %>% 
@@ -238,8 +238,8 @@ p5_sex <- ggplot(data = insurance_df, aes(x= sex, fill = sex, color= sex)) +
             aes(y = n, label = scales::percent(prop)),
             position = position_stack(vjust=0.5),
             colour = "white", size = 5)+
-  scale_fill_manual(values = c("dodgerblue3", "goldenrod3"))+
-  scale_color_manual(values = c("dodgerblue1", "goldenrod1"))+
+  scale_fill_manual(values = c("cyan4", "goldenrod3"))+
+  scale_color_manual(values = c("cadetblue2", "goldenrod1"))+
   labs(x= "Sex",
        y = "Count",
        title = "Sex distribution")+
@@ -257,8 +257,8 @@ p6_smoker <- ggplot(data = insurance_df, aes(x= smoker, fill = smoker, color= sm
             aes(y = n, label = scales::percent(prop)),
             position = position_stack(vjust=0.5),
             colour = "white", size = 5)+
-  scale_fill_manual(values = c("dodgerblue3", "goldenrod3"))+
-  scale_color_manual(values = c("dodgerblue1", "goldenrod1"))+
+  scale_fill_manual(values = c("cyan4", "goldenrod3"))+
+  scale_color_manual(values = c("cadetblue2", "goldenrod1"))+
   labs(x= "Smoker status",
        y = "Count",
        title = "Smoker status distribution")+
@@ -268,7 +268,7 @@ p6_smoker <- ggplot(data = insurance_df, aes(x= smoker, fill = smoker, color= sm
 
 # create a bar plot for region
 p7_region <- ggplot(data = insurance_df, aes(x= region, fill = region)) +
-  geom_bar(width = 0.7, color = "dodgerblue1", fill = "dodgerblue3")+
+  geom_bar(width = 0.7, color = "cadetblue2", fill = "cyan4")+
   geom_text(data = . %>% 
               group_by(region) %>% 
               tally() %>% 
@@ -324,7 +324,7 @@ The figures below show the bivariate relationships of `charges` to `sex`, `regio
 
 ```{r, fig.align='center', fig.width= 15, fig.height = 5}
 p3_charges_sex <- ggplot(data = insurance_df, aes(x= sex, y = charges)) +
-  geom_boxplot(alpha = 0.8, color = "dodgerblue3") + 
+  geom_boxplot(alpha = 0.8, color = "cyan4") + 
   scale_fill_brewer(palette= "Blues") +
   scale_y_continuous(label = dollar_format())+
   labs(x = "Sex",
@@ -351,7 +351,7 @@ ggarrange(p3_charges_sex, p5_charges_region, ncol=2)
 
 ```{r, fig.align='center', fig.width=15, fig.height = 5}
 p4_charges_smoker <- ggplot(data = insurance_df, aes(x= smoker, y = charges)) +
-  geom_boxplot(alpha = 0.8, color = "dodgerblue3")+
+  geom_boxplot(alpha = 0.8, color = "cyan4")+
   scale_y_continuous(label = dollar_format())+
   labs(x = "Smoker status",
        y = "Charges", 
@@ -360,7 +360,7 @@ p4_charges_smoker <- ggplot(data = insurance_df, aes(x= smoker, y = charges)) +
   theme(legend.position = "none")
 
 p6_charges_children_num <- ggplot(data = insurance_df, aes(x= children_num, y = charges)) +
-  geom_boxplot(alpha = 0.8, color = "dodgerblue3")+
+  geom_boxplot(alpha = 0.8, color = "cyan4")+
   scale_y_continuous(label = dollar_format())+
   labs(x = "Number of Children",
        y = "Charges", 
@@ -387,7 +387,7 @@ p1_charges_age_sex <- ggplot(data=insurance_df, aes(x= age, y = charges, color =
   geom_point(size=2)+
   geom_smooth(method = "lm", aes(color = sex), size = 0.5)+
   scale_y_continuous(label = dollar_format())+
-  scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
+  scale_color_manual(values= c("goldenrod3", "cyan4")) +
   theme(plot.title = element_text(size = 16), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   theme(legend.position = "bottom", legend.title = element_text(size = 15), legend.text = element_text(size = 15)) +
   labs(x = "Age",
@@ -399,7 +399,7 @@ p2_charges_age_smoker <- ggplot(data=insurance_df, aes(x= age, y = charges, colo
   geom_point(size=2)+
   geom_smooth(method = "lm", aes(color = smoker), size = 0.5)+
   scale_y_continuous(label = dollar_format())+
-  scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
+  scale_color_manual(values= c("goldenrod3", "cyan4")) +
   theme(plot.title = element_text(size = 16), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   theme(legend.position = "bottom", legend.title = element_text(size = 15), legend.text = element_text(size = 15)) +
   labs(x = "Age",
@@ -429,7 +429,7 @@ p4_charges_bmi_smoker <- ggplot(data=insurance_df, aes(x= bmi, y = charges, colo
   geom_point(size=2)+
   geom_smooth(formula = 'y ~ x', method = "lm", aes(color = smoker), linewidth = 1)+
   scale_y_continuous(label = dollar_format())+
-  scale_color_manual(values= c("goldenrod3", "dodgerblue3")) +
+  scale_color_manual(values= c("goldenrod3", "cyan4")) +
   theme(plot.title = element_text(size = 16), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
   theme(legend.position = "bottom", legend.title = element_text(size = 15), legend.text = element_text(size = 15)) +
   labs(x = "BMI",
@@ -614,7 +614,7 @@ plot1_models <- ggplot(data = model_results, aes(x= models, y = r2, label = sign
        title = "Comparison of Model R squared values")
 
 plot2_models <- ggplot(data = model_results, aes(x= models, y = rse, label = signif(rse, 3))) +
-  geom_col(width= 0.7, color = "cadetblue1", fill = "cyan4")+
+  geom_col(width= 0.7, color = "cadetblue2", fill = "cyan4")+
   geom_text(position = position_stack(vjust=0.5),
             colour = "white", size = 5)+
   theme(plot.title = element_text(size = 16), axis.title = element_text(size = 16), axis.text = element_text(size = 16))+
