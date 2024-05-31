@@ -173,7 +173,7 @@ sum(is.na(insurance_df$region))
 ```{r, include = FALSE}
 # Number of children
 is.factor(insurance_df$children)
-# Output is False
+# Output is False 
 
 #Convert to a factor
 insurance_df$children_num <- factor(insurance_df$children)
