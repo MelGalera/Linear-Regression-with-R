@@ -254,18 +254,12 @@ variables with the target `charges` variable (medical expenses).
 
 <div align="center">
 
-*charges = $\beta_{0}$ + $\beta_{1}$age + $\beta_{2}$bmi +
-$\beta_{3}$children + $\beta_{4}$sex + $\beta_{5}$smoker +
-$\beta_{6}$region + $\epsilon$*
+charges = $\beta_0$ + $\beta_1$age + $\beta_2$bmi + $\beta_3$children +
+$\beta_4$sex + $\beta_5$smoker + $\beta_6$region + $\epsilon$
 
 </div>
 
-<div align="center">
-
-*charges = $\beta_0$ + $\beta_1$age + $\beta_2$bmi + $\beta_3$children +
-$\beta_4$sex + $\beta_5$smoker + $\beta_6$region + $\epsilon$*
-
-</div>
+<br>
 
 ``` r
 model_01 <- lm(charges ~ age + bmi + children + sex + smoker + region, data = training_data)
@@ -323,11 +317,13 @@ be disproportionately higher for older patients. Hence, a variable
 
 <div align="center">
 
-*charges = $\beta_{0}$ + $\beta_{1}$age + $\beta_{2}$age^{2} +
-$\beta_{3}$bmi + $\beta_{4}$children + $\beta_{5}$sex +
-$\beta_{6}$smoker + $\beta_{7}$region + $\epsilon$*
+charges = $\beta_0$ + $\beta_1$age + $\beta_2$age$^2$ + $\beta_3$bmi +
+$\beta_4$children + $\beta_5$sex + $\beta_6$smoker + $\beta_7$region +
+$\epsilon$
 
 </div>
+
+<br>
 
 ``` r
 model_02 <- lm(charges ~ age + age2 + bmi + children + sex + smoker + region, data = training_data)
@@ -382,11 +378,13 @@ i.e., when BMI is 30 or above. Hence, a binary indicator variable
 
 <div align="center">
 
-*charges = $\beta_{0}$ + $\beta_{1}$age + $\beta_{2}$age^{2} +
-$\beta_{3}$bmi + $\beta_{4}$bmi30 +$\beta_{5}$children +
-$\beta_{6}$sex + $\beta_{7}$smoker + $\beta_{8}$region + $\epsilon$*
+charges = $\beta_0$ + $\beta_1$age + $\beta_2$age$^2$ + $\beta_3$bmi +
+$\beta_4$bmi30 + $\beta_5$children + $\beta_6$sex + $\beta_7$smoker +
+$\beta_8$region + $\epsilon$
 
 </div>
+
+<br>
 
 ``` r
 model_03 <- lm(charges ~ age + age2 + bmi + bmi30 + children + sex + smoker + region, data = training_data)
@@ -437,12 +435,13 @@ added.
 
 <div align="center">
 
-*charges = $\beta_{0}$ + $\beta_{1}$age + $\beta_{2}$age^{2} +
-$\beta_{3}$bmi + $\beta_{4}$bmi30 + $\beta_{5}$children +
-$\beta_{6}$sex + $\beta_{7}$smoker + $\beta_{8}$bmi30:smoker +
-$\beta_{9}$region + $\epsilon$*
+charges = $\beta_0$ + $\beta_1$age + $\beta_2$age$^2$ + $\beta_3$bmi +
+$\beta_4$bmi30 + $\beta_5$children + $\beta_6$sex + $\beta_7$smoker +
+$\beta_8$bmi30:smoker + $\beta_9$region + $\epsilon$
 
 </div>
+
+<br>
 
 ``` r
 model_04 <- lm(charges ~ age + age2 + bmi + bmi30 + children + sex + smoker + bmi30:smoker + region, data = training_data)
@@ -535,15 +534,11 @@ points showing large deviation of predicted from known values of
 
 In this project, predictive models for determining medical expenses
 based on certain patient characteristics were developed and compared.
-The selected model below, Model 4, which is an improved model including
-an added non-linear relationship (`age2`), a transformed variable
-(`bmi30`) and an interaction relationship (`bmi30:smoker`) was
-determined to have the better fit to the dataset among the models,
-evident from its smallest RSE (4490) and highest adjusted RSE (0.87).
-
-``` r
-model_04 <- lm(charges ~ age + age2 + bmi + bmi30 + children + sex + smoker + bmi30:smoker + region, data = training_data)
-```
+The selected model - Model 4, which is an improved model including an
+added non-linear relationship (`age2`), a transformed variable (`bmi30`)
+and an interaction relationship (`bmi30:smoker`) was determined to have
+the better fit to the dataset among the models, evident from its
+smallest RSE (4490) and highest adjusted RSE (0.87).
 
 Based on the summary of Model 4, the variables with the greatest
 predictive power are `age2`, `children`, `smokeryes` and
