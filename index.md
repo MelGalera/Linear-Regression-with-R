@@ -260,6 +260,13 @@ $\beta_{6}$region + $\epsilon$*
 
 </div>
 
+<div align="center">
+
+*charges = $\beta_0$ + $\beta_1$age + $\beta_2$bmi + $\beta_3$children +
+$\beta_4$sex + $\beta_5$smoker + $\beta_6$region + $\epsilon$*
+
+</div>
+
 ``` r
 model_01 <- lm(charges ~ age + bmi + children + sex + smoker + region, data = training_data)
 

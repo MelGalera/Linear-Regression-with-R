@@ -499,6 +499,11 @@ This model fits a linear regression model that relates all 6 independent variabl
 
 <div align = 'center'> _charges = $\beta_{0}$ + $\beta_{1}$age + $\beta_{2}$bmi + $\beta_{3}$children + $\beta_{4}$sex + $\beta_{5}$smoker + $\beta_{6}$region + $\epsilon$_ </div>  
 
+
+
+<div align = 'center'>*charges = $\beta_0$ + $\beta_1$age + $\beta_2$bmi + $\beta_3$children + $\beta_4$sex + $\beta_5$smoker + $\beta_6$region + $\epsilon$*</div>
+
+
 ```{r, echo = TRUE}
 model_01 <- lm(charges ~ age + bmi + children + sex + smoker + region, data = training_data)
 
