@@ -669,7 +669,9 @@ In this project, predictive models for determining medical expenses based on cer
 
 Based on the summary of Model 4, the variables with great predictive power are `age2`, `children`, `smokeryes` and `bmi30:smokeryes`. A child or dependent has an averaged increased cost of \$708 in medical expenses per year.
 
-Furthermore, a smoker has an average increased cost of \$13,500 per year, and an obese smoker will have an additional \$19,894 per year in medical expenses. 
+Furthermore, a smoker has an average increased cost of \$13,500 per year. 
+
+And an obese smoker will have an additional \$19,894 per year in medical expenses. 
 
 Although the model has good R-squared result, the plot showing predicted `charges` against known `charges` of the 'test data' shows that the regression model does not perfectly fit the dataset. As the dataset seemed not large enough, adding more data (observations) to the dataset might improve the model and increase accuracy of the model in forecasting medical expenses. Moreover, further investigation and action on the outliers could also help in building more fitting models. 
 
