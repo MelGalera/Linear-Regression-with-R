@@ -528,7 +528,7 @@ points showing large deviation of predicted from known values of
 
 <br> <br>
 
-### IV. Conclusion
+### IV. Insights
 
 In this project, predictive models for determining medical expenses
 based on certain patient characteristics were developed and compared.
@@ -544,8 +544,10 @@ or dependent has an averaged increased cost of \$708 in medical expenses
 per year.
 
 Furthermore, a smoker has an average increased cost of \$13,500 per
-year, and an obese smoker will have an additional \$19,894 per year in
-medical expenses.
+year.
+
+And an obese smoker will have an additional \$19,894 per year in medical
+expenses.
 
 Although the model has good R-squared result, the plot showing predicted
 `charges` against known `charges` of the ‘test data’ shows that the
